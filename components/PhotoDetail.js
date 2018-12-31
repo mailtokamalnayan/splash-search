@@ -1,9 +1,11 @@
 
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { View, StyleSheet, Text, Image, TouchableOpacity } from 'react-native'
+import { ScrollView, View, StyleSheet, Text, Image, TouchableOpacity } from 'react-native'
 import AutoHeightImage from 'react-native-auto-height-image';
 import api from './Api';
+import { iOSUIKit } from 'react-native-typography';
+import Icon from 'react-native-vector-icons/Feather';
 
 export default class PhotoDetail extends Component {
   static propTypes = {
@@ -23,34 +25,93 @@ export default class PhotoDetail extends Component {
   render() {
       const { photo } = this.state;
     return (
-        <View style={styles.container}>
-            <TouchableOpacity onPress={this.props.onBack}>
-                <Text>Back</Text>
+        <ScrollView style={styles.container}>
+            <TouchableOpacity  
+                onPress={this.props.onBack}>
+            <Text style={styles.back}>← Back</Text>
             </TouchableOpacity>
-            <AutoHeightImage 
+            {photo &&
+                <AutoHeightImage 
                 source={{ uri: photo.urls.small }} 
                 style={styles.image}
                 width={375}
             />
-            <Text>{photo.user.name}</Text>
-            <Image 
-                style={styles.user}
-                source={{ uri: photo.user.profile_image.small }}>
-            </Image>
-            {photo.exif && (
-                <Text>{photo.exif.model}</Text>
+            }
+            {photo &&
+            <View style={styles.author}>
+                <Image 
+                    style={styles.user}
+                    source={{ uri: photo.user.profile_image.medium }}>
+                </Image>    
+                <Text style={[iOSUIKit.subheadEmphasized, styles.center]}>{photo.user.name}</Text>
+                <Text style={[iOSUIKit.subhead, styles.center, styles.opacity, styles.marginTop]}>{photo.user.bio}</Text>
+            </View>
+            }
+            {photo && (
+                <View style={styles.exif}>
+                    <View style={[iOSUIKit.body, styles.row]}>
+                        <Icon style={styles.icon} name="camera" size={24} color="#999" />
+                        {photo.exif && 
+                            <View>
+                                <Text style={[iOSUIKit.subhead, styles.center]}>{photo.exif.model}</Text>
+                                <Text style={[styles.center, styles.marginTop, styles.opacity]}>ƒ/{photo.exif.aperture} · {photo.exif.focal_length}mm · {photo.exif.iso} ISO</Text>
+                            </View>
+                            
+                            
+                        }
+                    </View>
+                </View>
             )}
-        </View>
+        </ScrollView>
     )
   }
 }
 
 const styles = StyleSheet.create({
+    row: {
+        width: '100%',
+        alignItems: 'center',
+        alignContent: 'center',
+        justifyContent: 'center',
+    },
+    marginTop: {
+        marginTop: 4
+    },
+    icon: {
+        marginRight: 8,
+        paddingBottom: 8
+    },
+    opacity: {
+        opacity: 0.65
+    },
+    exif: {
+        marginTop: 8,
+        padding: 16,
+        paddingBottom: 48,
+        flexDirection: 'row',
+    },
+    center: {
+        textAlign: 'center'
+    },
+    back: {
+        fontSize: 16,
+        paddingLeft: 16,
+        marginBottom: 16,
+        fontWeight: '600'
+    },
     container: {
       marginTop: 60,
     },
     user: {
         width: 60,
-        height: 60
+        height: 60,
+        borderRadius: 30,
+        marginLeft: 'auto',
+        marginRight: 'auto',
+        marginBottom: 8
+    },
+    author: {
+        marginTop: 4,
+        padding: 16,
     }
   });

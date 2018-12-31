@@ -36,10 +36,12 @@ export default class App extends Component<Props> {
       let searchPhotosFromApi = [];
       if (searchTerm) {
         searchPhotosFromApi = await api.fetchSearchResults(this.state.searchTerm, this.state.page);
-        this.setState(state => ({
-          searchPhotos: searchPhotosFromApi,
-          photosArray: [...state.photosArray, ...searchPhotosFromApi.results],
-        }));
+        {searchPhotosFromApi && 
+          this.setState(state => ({
+            searchPhotos: searchPhotosFromApi,
+            photosArray: [...state.photosArray, ...searchPhotosFromApi.results],
+          }));
+        }
       }
     } catch (e) {
       console.log(e);
