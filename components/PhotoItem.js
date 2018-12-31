@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { View, Text, Image, StyleSheet } from 'react-native'
+import { View, StyleSheet } from 'react-native'
+import AutoHeightImage from 'react-native-auto-height-image';
 
 export default class PhotoItem extends Component {
   static propTypes = {
@@ -10,9 +11,10 @@ export default class PhotoItem extends Component {
   render() {
     return (
         <View>
-            <Image 
+            <AutoHeightImage 
                 source={{ uri: this.props.photo.urls.thumb }} 
                 style={styles.image}
+                width={375}
             />
         </View>
     )
@@ -21,8 +23,6 @@ export default class PhotoItem extends Component {
 
 const styles = StyleSheet.create({
     image: {
-        width: '100%',
-        minHeight: 200,
         marginBottom: 8
     },
 })

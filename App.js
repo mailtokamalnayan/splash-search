@@ -17,7 +17,7 @@ export default class App extends Component<Props> {
   state = {
     searchPhotos: [],
     photosArray: [],
-    photoUrl: ''
+    photoUrl: '',
   }
   searchPhotosResults = async (searchTerm) => {
     try {

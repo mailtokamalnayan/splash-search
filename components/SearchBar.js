@@ -35,7 +35,8 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     marginLeft: 'auto',
     marginRight: 'auto',
-    padding: 16
+    padding: 16,
+    fontSize: 16
   },
 })
 
