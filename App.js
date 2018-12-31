@@ -46,9 +46,16 @@ export default class App extends Component<Props> {
       (photo) => photo.id === this.state.currentPhotoId
     )
   };
+  unsetCurrentPhoto = () => {
+    this.setState({
+      currentPhotoId: null
+    })
+  }
   render() {
     if (this.state.currentPhotoId) {
-      return <PhotoDetail photo={this.currentPhoto()}/>
+      return <PhotoDetail 
+      onBack={this.unsetCurrentPhoto} 
+      initialPhotoData={this.currentPhoto()}/>
     }
     if (this.state.photosArray.length > 0) {
       return (
