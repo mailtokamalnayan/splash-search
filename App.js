@@ -12,6 +12,7 @@ import SearchBar from './components/SearchBar';
 import api from './components/Api';
 import PhotoList from './components/PhotoList';
 import PhotoDetail from './components/PhotoDetail';
+import debounce from 'lodash.debounce';
 
 type Props = {};
 export default class App extends Component<Props> {
@@ -20,7 +21,9 @@ export default class App extends Component<Props> {
     photosArray: [],
     photoUrl: '',
     currentPhotoId: null,
-    page: 1
+    page: 1,
+    loading: false,
+    searchTerm: ''
   }
   setCurrentPhoto = (photoId) => {
     this.setState({
@@ -29,15 +32,15 @@ export default class App extends Component<Props> {
   };
   searchPhotosResults = async (searchTerm) => {
     try {
-      let searchPhotos = [];
+      console.log(searchTerm);
+      let searchPhotosFromApi = [];
       if (searchTerm) {
-        searchPhotos = await api.fetchSearchResults(searchTerm, this.state.page);
+        searchPhotosFromApi = await api.fetchSearchResults(this.state.searchTerm, this.state.page);
+        this.setState(state => ({
+          searchPhotos: searchPhotosFromApi,
+          photosArray: [...state.photosArray, ...searchPhotosFromApi.results],
+        }));
       }
-      this.setState({
-        searchPhotos: searchPhotos,
-        photosArray: searchPhotos.results,
-        photoUrl: searchPhotos.results.urls
-      });
     } catch (e) {
       console.log(e);
     }
@@ -52,6 +55,22 @@ export default class App extends Component<Props> {
       currentPhotoId: null
     })
   }
+  handleChange = () => {
+    this.setState(state => ({ 
+      page: state.page + 1}), () => 
+      this.searchPhotosResults(this.state.searchTerm)
+      )
+  }
+  
+  debouncedSearchResults = debounce(this.searchPhotosResults, 300);
+  handleChangeSearch = (searchTerm) => {
+    this.setState({ searchTerm }, () => {
+      this.debouncedSearchResults(this.state.searchTerm);
+      this.setState({
+        photosArray: []
+      })
+    });
+  }
   render() {
     if (this.state.currentPhotoId) {
       return <PhotoDetail 
@@ -61,8 +80,9 @@ export default class App extends Component<Props> {
     if (this.state.photosArray.length > 0) {
       return (
         <View style={styles.container}>
-          <SearchBar searchPhotosResults={this.searchPhotosResults} />
-            <PhotoList 
+          <SearchBar onSearch={this.handleChangeSearch} />
+            <PhotoList
+              onEndReached={this.handleChange} 
               onItemPress = {this.setCurrentPhoto}
               photos={this.state.photosArray}
               photoUrl = {this.state.photoUrl}>
@@ -72,7 +92,7 @@ export default class App extends Component<Props> {
     }
     return (
       <View style={styles.container}>
-        <SearchBar searchPhotosResults={this.searchPhotosResults} />
+        <SearchBar onSearch={this.handleChangeSearch} />
       </View>
     );
 }}

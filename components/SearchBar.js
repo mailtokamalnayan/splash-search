@@ -5,24 +5,14 @@ import debounce from 'lodash.debounce';
 
 export default class SearchBar extends Component {
   static propTypes = {
-    searchPhotosResults: PropTypes.func.isRequired,
-  };
-  state = {
-    searchTerm: ''
-  };
-  debouncedSearchResults = debounce(this.props.searchPhotosResults, 300);
-  handleChange = (searchTerm) => {
-    this.setState({ searchTerm }, () => {
-      //Deboubce
-      this.debouncedSearchResults(this.state.searchTerm);
-    });
-  };
+    onSearch: PropTypes.func.isRequired,
+  }
   render() {
     return (
         <TextInput 
           placeholder='Search photos' 
           style={styles.input} 
-          onChangeText={this.handleChange}/>
+          onChangeText={this.props.onSearch}/>
     )
   }
 }
