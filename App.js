@@ -20,6 +20,7 @@ export default class App extends Component<Props> {
     photosArray: [],
     photoUrl: '',
     currentPhotoId: null,
+    page: 1
   }
   setCurrentPhoto = (photoId) => {
     this.setState({
@@ -30,7 +31,7 @@ export default class App extends Component<Props> {
     try {
       let searchPhotos = [];
       if (searchTerm) {
-        searchPhotos = await api.fetchSearchResults(searchTerm);
+        searchPhotos = await api.fetchSearchResults(searchTerm, this.state.page);
       }
       this.setState({
         searchPhotos: searchPhotos,
@@ -79,5 +80,6 @@ export default class App extends Component<Props> {
 const styles = StyleSheet.create({
   container: {
     marginTop: 60,
+    marginBottom: 120
   }
 });
