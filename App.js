@@ -11,6 +11,7 @@ import {StyleSheet, View, Text} from 'react-native';
 import SearchBar from './components/SearchBar';
 import api from './components/Api';
 import PhotoList from './components/PhotoList';
+import PhotoDetail from './components/PhotoDetail';
 
 type Props = {};
 export default class App extends Component<Props> {
@@ -18,7 +19,13 @@ export default class App extends Component<Props> {
     searchPhotos: [],
     photosArray: [],
     photoUrl: '',
+    currentPhotoId: null,
   }
+  setCurrentPhoto = (photoId) => {
+    this.setState({
+      currentPhotoId: photoId
+    })
+  };
   searchPhotosResults = async (searchTerm) => {
     try {
       let searchPhotos = [];
@@ -34,24 +41,33 @@ export default class App extends Component<Props> {
       console.log(e);
     }
   };
+  currentPhoto = () => {
+    return this.state.photosArray.find(
+      (photo) => photo.id === this.state.currentPhotoId
+    )
+  };
   render() {
+    if (this.state.currentPhotoId) {
+      return <PhotoDetail photo={this.currentPhoto()}/>
+    }
+    if (this.state.photosArray.length > 0) {
+      return (
+        <View style={styles.container}>
+          <SearchBar searchPhotosResults={this.searchPhotosResults} />
+            <PhotoList 
+              onItemPress = {this.setCurrentPhoto}
+              photos={this.state.photosArray}
+              photoUrl = {this.state.photoUrl}>
+            </PhotoList>
+        </View>
+      );
+    }
     return (
       <View style={styles.container}>
         <SearchBar searchPhotosResults={this.searchPhotosResults} />
-        { this.state.photosArray.length > 0 ? (
-          <PhotoList 
-            photos={this.state.photosArray}
-            photoUrl = {this.state.photoUrl}>
-          </PhotoList>
-        )
-        : (
-          <Text></Text>
-        )
-      }
       </View>
     );
-  }
-}
+}}
 
 const styles = StyleSheet.create({
   container: {

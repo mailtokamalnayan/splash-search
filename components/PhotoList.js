@@ -5,7 +5,8 @@ import PhotoItem from './PhotoItem'
 
 export default class PhotoList extends Component {
   static propTypes = {
-    photos: PropTypes.array.isRequired
+    photos: PropTypes.array.isRequired,
+    onItemPress: PropTypes.func.isRequired,
   }
 
   render() {
@@ -14,7 +15,11 @@ export default class PhotoList extends Component {
         <FlatList
             key={this.props.photos.id}
             data={this.props.photos}
-            renderItem={({item}) => <PhotoItem photo={item}></PhotoItem> }
+            renderItem={({item}) => 
+                <PhotoItem 
+                    onPress={this.props.onItemPress}
+                    photo={item}>
+                </PhotoItem> }
             keyExtractor={(item, index) => index.toString()}
             >
         </FlatList>
