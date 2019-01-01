@@ -32,11 +32,11 @@ export default class PhotoDetail extends Component {
       const { photo } = this.state;
     return (
         <View style={{height: '100%'}}>
-            <ScrollView style={styles.container}>
-                <TouchableOpacity  
+            <TouchableOpacity  
                     onPress={this.props.onBack}>
                 <Text style={styles.back}>← Back</Text>
-                </TouchableOpacity>
+            </TouchableOpacity>
+            <ScrollView style={styles.container}>
                 {photo &&
                     <AutoHeightImage 
                     source={{ uri: photo.urls.small }} 
@@ -120,10 +120,11 @@ const styles = StyleSheet.create({
         fontSize: 16,
         paddingLeft: 16,
         marginBottom: 16,
-        fontWeight: '600'
+        fontWeight: '600',
+        marginTop: 48
     },
     container: {
-      marginTop: 60,
+      marginTop: 4,
     },
     user: {
         width: 60,
