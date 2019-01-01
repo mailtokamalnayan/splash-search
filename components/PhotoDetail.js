@@ -1,11 +1,12 @@
 
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { ScrollView, View, StyleSheet, Text, Image, TouchableOpacity } from 'react-native'
+import {ScrollView, View, StyleSheet, Text, Image, TouchableOpacity, CameraRoll, Alert, Platform } from 'react-native'
 import AutoHeightImage from 'react-native-auto-height-image';
 import api from './Api';
 import { iOSUIKit } from 'react-native-typography';
 import Icon from 'react-native-vector-icons/Feather';
+import RNFetchBlob from 'react-native-fetch-blob';
 
 export default class PhotoDetail extends Component {
   static propTypes = {
@@ -17,16 +18,24 @@ export default class PhotoDetail extends Component {
   }
   async componentDidMount() {
     const fullphotoDetail = await api.fetchPhotoDetail(this.state.photo.id);
-    console.log(fullphotoDetail);
     this.setState({
         photo: fullphotoDetail
     })
   }
+
+  saveToCameraRoll = async (image) => {
+    CameraRoll.saveToCameraRoll(image).then(Alert.alert('Success', 'Photo added to camera roll!')).catch(err => console.log('err:', err))
+    console.log('Function invoked.');
+    }
+
   render() {
       const { photo } = this.state;
     return (
         <View style={{height: '100%'}}>
-            <TouchableOpacity style={styles.download}>
+            <TouchableOpacity 
+                style={styles.download} 
+                onPress={() => this.saveToCameraRoll(photo)}
+            >
                 <Icon name="arrow-down" size={32} color="#fff" />
             </TouchableOpacity>
             <ScrollView style={styles.container}>
@@ -59,6 +68,9 @@ export default class PhotoDetail extends Component {
                                 <View>
                                     <Text style={[iOSUIKit.subhead, styles.center]}>{photo.exif.model}</Text>
                                     <Text style={[styles.center, styles.marginTop, styles.opacity]}>ƒ/{photo.exif.aperture} · {photo.exif.focal_length}mm · {photo.exif.iso} ISO</Text>
+                                    <TouchableOpacity onPress={() => this.saveToCameraRoll(photo.urls.small)}>
+                                        <Text>Download</Text>
+                                    </TouchableOpacity>
                                 </View>
                             }
                         </View>
