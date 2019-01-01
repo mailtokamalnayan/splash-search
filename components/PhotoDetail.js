@@ -25,49 +25,64 @@ export default class PhotoDetail extends Component {
   render() {
       const { photo } = this.state;
     return (
-        <ScrollView style={styles.container}>
-            <TouchableOpacity  
-                onPress={this.props.onBack}>
-            <Text style={styles.back}>← Back</Text>
+        <View style={{height: '100%'}}>
+            <TouchableOpacity style={styles.download}>
+                <Icon name="arrow-down" size={32} color="#fff" />
             </TouchableOpacity>
-            {photo &&
-                <AutoHeightImage 
-                source={{ uri: photo.urls.small }} 
-                style={styles.image}
-                width={375}
-            />
-            }
-            {photo &&
-            <View style={styles.author}>
-                <Image 
-                    style={styles.user}
-                    source={{ uri: photo.user.profile_image.medium }}>
-                </Image>    
-                <Text style={[iOSUIKit.subheadEmphasized, styles.center]}>{photo.user.name}</Text>
-                <Text style={[iOSUIKit.subhead, styles.center, styles.opacity, styles.marginTop]}>{photo.user.bio}</Text>
-            </View>
-            }
-            {photo && (
-                <View style={styles.exif}>
-                    <View style={[iOSUIKit.body, styles.row]}>
-                        <Icon style={styles.icon} name="camera" size={24} color="#999" />
-                        {photo.exif && 
-                            <View>
-                                <Text style={[iOSUIKit.subhead, styles.center]}>{photo.exif.model}</Text>
-                                <Text style={[styles.center, styles.marginTop, styles.opacity]}>ƒ/{photo.exif.aperture} · {photo.exif.focal_length}mm · {photo.exif.iso} ISO</Text>
-                            </View>
-                            
-                            
-                        }
-                    </View>
+            <ScrollView style={styles.container}>
+                <TouchableOpacity  
+                    onPress={this.props.onBack}>
+                <Text style={styles.back}>← Back</Text>
+                </TouchableOpacity>
+                {photo &&
+                    <AutoHeightImage 
+                    source={{ uri: photo.urls.small }} 
+                    style={styles.image}
+                    width={375}
+                />
+                }
+                {photo &&
+                <View style={styles.author}>
+                    <Image 
+                        style={styles.user}
+                        source={{ uri: photo.user.profile_image.medium }}>
+                    </Image>    
+                    <Text style={[iOSUIKit.subheadEmphasized, styles.center]}>{photo.user.name}</Text>
+                    <Text style={[iOSUIKit.subhead, styles.center, styles.opacity, styles.marginTop]}>{photo.user.bio}</Text>
                 </View>
-            )}
-        </ScrollView>
+                }
+                {photo && (
+                    <View style={styles.exif}>
+                        <View style={[iOSUIKit.body, styles.row]}>
+                            <Icon style={styles.icon} name="camera" size={24} color="#999" />
+                            {photo.exif && 
+                                <View>
+                                    <Text style={[iOSUIKit.subhead, styles.center]}>{photo.exif.model}</Text>
+                                    <Text style={[styles.center, styles.marginTop, styles.opacity]}>ƒ/{photo.exif.aperture} · {photo.exif.focal_length}mm · {photo.exif.iso} ISO</Text>
+                                </View>
+                            }
+                        </View>
+                    </View>
+                )}
+            </ScrollView>
+        </View>
     )
   }
 }
 
 const styles = StyleSheet.create({
+    download: {
+        backgroundColor: '#444',
+        width: 60,
+        height: 60,
+        borderRadius: 30,
+        position: 'absolute',
+        bottom: 24,
+        right: 24,
+        justifyContent: 'space-around',
+        alignItems: 'center',
+        alignContent: 'center',
+    },
     row: {
         width: '100%',
         alignItems: 'center',
@@ -78,7 +93,6 @@ const styles = StyleSheet.create({
         marginTop: 4
     },
     icon: {
-        marginRight: 8,
         paddingBottom: 8
     },
     opacity: {
