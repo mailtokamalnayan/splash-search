@@ -12,8 +12,12 @@
     "react": "16.6.3",
     "react-native": "0.57.8",
     "react-native-auto-height-image": "^1.0.5",
+    "react-native-image-with-placeholder": "^0.1.1",
+    "react-native-linear-gradient": "^2.5.3",
+    "react-native-shimmer-placeholder": "^1.0.30",
     "react-native-typography": "^1.4.0",
-    "react-native-vector-icons": "^6.1.0"
+    "react-native-vector-icons": "^6.1.0",
+    "react-shimmer": "^1.0.2"
   },
   "devDependencies": {
     "babel-jest": "23.6.0",

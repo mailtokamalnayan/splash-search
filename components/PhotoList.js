@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { View, Text, StyleSheet, FlatList } from 'react-native'
 import PhotoItem from './PhotoItem'
-import api from './Api';
 
 export default class PhotoList extends Component {
   static propTypes = {

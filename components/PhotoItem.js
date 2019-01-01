@@ -1,7 +1,10 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { TouchableOpacity, StyleSheet } from 'react-native'
+import { TouchableOpacity, Dimensions, Image } from 'react-native'
 import AutoHeightImage from 'react-native-auto-height-image';
+import ProgressiveImage from './ProgressiveImage';
+
+const w = Dimensions.get('window');
 
 export default class PhotoItem extends Component {
   static propTypes = {
@@ -15,18 +18,13 @@ export default class PhotoItem extends Component {
   render() {
     return (
         <TouchableOpacity onPress={this.handlePress}>
-            <AutoHeightImage 
-                source={{ uri: this.props.photo.urls.thumb }} 
-                style={styles.image}
-                width={375}
+            <ProgressiveImage
+                thumbnailSource={{ uri: this.props.photo.urls.thumb }} 
+                source={{ uri: this.props.photo.urls.small }} 
+                style={{ width: w.width, height: w.width, marginBottom: 8 }}
+                resizeMode="cover"
             />
         </TouchableOpacity>
     )
   }
 }
-
-const styles = StyleSheet.create({
-    image: {
-        marginBottom: 8
-    },
-})
