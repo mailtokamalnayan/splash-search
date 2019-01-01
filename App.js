@@ -7,7 +7,7 @@
  */
 
 import React, {Component} from 'react';
-import {StyleSheet, View, Text} from 'react-native';
+import {StyleSheet, View, ActivityIndicator} from 'react-native';
 import SearchBar from './components/SearchBar';
 import api from './components/Api';
 import PhotoList from './components/PhotoList';
@@ -32,6 +32,11 @@ export default class App extends Component<Props> {
   };
   searchPhotosResults = async (searchTerm) => {
     try {
+      if (this.state.searchTerm == '') {
+        // console.log("Empty search term")
+        this.setState({
+          loading: false
+        }); }
       console.log(searchTerm);
       let searchPhotosFromApi = [];
       if (searchTerm) {
@@ -40,6 +45,7 @@ export default class App extends Component<Props> {
           this.setState(state => ({
             searchPhotos: searchPhotosFromApi,
             photosArray: [...state.photosArray, ...searchPhotosFromApi.results],
+            loading: false
           }));
         }
       }
@@ -69,7 +75,8 @@ export default class App extends Component<Props> {
     this.setState({ searchTerm }, () => {
       this.debouncedSearchResults(this.state.searchTerm);
       this.setState({
-        photosArray: []
+        photosArray: [],
+        loading: true
       })
     });
   }
@@ -83,6 +90,9 @@ export default class App extends Component<Props> {
       return (
         <View style={styles.container}>
           <SearchBar onSearch={this.handleChangeSearch} />
+          {
+              this.state.loading?<ActivityIndicator size="small" color="#000" /> : false
+            }
             <PhotoList
               onEndReached={this.handleChange} 
               onItemPress = {this.setCurrentPhoto}
@@ -95,6 +105,11 @@ export default class App extends Component<Props> {
     return (
       <View style={styles.container}>
         <SearchBar onSearch={this.handleChangeSearch} />
+        { this.state.loading?
+          <ActivityIndicator
+            style={{marginTop: 16}} 
+            size="small" 
+            color="#000" /> : false }
       </View>
     );
 }}
