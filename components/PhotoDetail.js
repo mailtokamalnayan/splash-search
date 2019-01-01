@@ -24,7 +24,7 @@ export default class PhotoDetail extends Component {
   }
 
   saveToCameraRoll = async (image) => {
-    CameraRoll.saveToCameraRoll(image).then(Alert.alert('Success', 'Photo added to camera roll!')).catch(err => console.log('err:', err))
+    CameraRoll.saveToCameraRoll(image).then(Alert.alert('Photo Added', 'Photo added to camera roll.')).catch(err => console.log('err:', err))
     console.log('Function invoked.');
     }
 
@@ -32,12 +32,6 @@ export default class PhotoDetail extends Component {
       const { photo } = this.state;
     return (
         <View style={{height: '100%'}}>
-            <TouchableOpacity 
-                style={styles.download} 
-                onPress={() => this.saveToCameraRoll(photo)}
-            >
-                <Icon name="arrow-down" size={32} color="#fff" />
-            </TouchableOpacity>
             <ScrollView style={styles.container}>
                 <TouchableOpacity  
                     onPress={this.props.onBack}>
@@ -68,15 +62,18 @@ export default class PhotoDetail extends Component {
                                 <View>
                                     <Text style={[iOSUIKit.subhead, styles.center]}>{photo.exif.model}</Text>
                                     <Text style={[styles.center, styles.marginTop, styles.opacity]}>ƒ/{photo.exif.aperture} · {photo.exif.focal_length}mm · {photo.exif.iso} ISO</Text>
-                                    <TouchableOpacity onPress={() => this.saveToCameraRoll(photo.urls.small)}>
-                                        <Text>Download</Text>
-                                    </TouchableOpacity>
                                 </View>
                             }
                         </View>
                     </View>
                 )}
             </ScrollView>
+            <TouchableOpacity 
+                style={styles.download} 
+                onPress={() => this.saveToCameraRoll(photo.urls.regular)}
+            >
+                <Icon name="arrow-down" size={32} color="#fff" />
+            </TouchableOpacity>
         </View>
     )
   }
@@ -134,7 +131,9 @@ const styles = StyleSheet.create({
         borderRadius: 30,
         marginLeft: 'auto',
         marginRight: 'auto',
-        marginBottom: 8
+        marginBottom: 8,
+        borderWidth: 1,
+        borderColor: '#ddd'
     },
     author: {
         marginTop: 4,
